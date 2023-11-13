@@ -18,6 +18,8 @@ public class MenuPanel extends JPanel implements ActionListener {
     private Border defaultBorder;
     private JTextArea textArea;
 
+    private JComboBox<String> models = new JComboBox<>(new String[]{"Foerderband", "Palettenlager"});
+
     private Webserver webserver = null;
 
     public MenuPanel(JTextArea textArea)
@@ -42,14 +44,17 @@ public class MenuPanel extends JPanel implements ActionListener {
         buttonGroup.add(startServer);
         buttonGroup.add(stopServer);
 
+        models.setFont(new Font("Dialog", Font.PLAIN, 14));
         startServer.setFont(new Font("Dialog", Font.PLAIN, 14));
         stopServer.setFont(new Font("Dialog", Font.PLAIN, 14));
         clear.setFont(new Font("Dialog", Font.PLAIN, 14));
 
+        models.addActionListener(this);
         startServer.addActionListener(this);
         stopServer.addActionListener(this);
         clear.addActionListener(this);
 
+        add(models);
         add(startServer);
         add(stopServer);
         add(clear);
@@ -58,14 +63,14 @@ public class MenuPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        System.out.println("Button "+e.getActionCommand()+" gedrueckt");
+
         if(e.getActionCommand().contains("Start") || e.getActionCommand().contains("Stop"))
         {
             startServer.setBorder(defaultBorder);
             stopServer.setBorder(defaultBorder);
             ((JButton)e.getSource()).setBorder(BorderFactory.createLineBorder(Color.green, 3));
         }
-
-        System.out.println("Button "+e.getActionCommand()+" gedrueckt");
 
         if(e.getActionCommand().contains("Start"))
         {
@@ -85,6 +90,13 @@ public class MenuPanel extends JPanel implements ActionListener {
                 {
                     textArea.setText("Ausgaben:\n");
                 }
+
+        if(e.getActionCommand().contains("comboBoxChanged"))
+        {
+            JComboBox cbox = (JComboBox)e.getSource();
+
+            System.out.println(cbox.getSelectedItem());
+        }
 
         repaint();
     }
